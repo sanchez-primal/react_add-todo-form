@@ -1,5 +1,7 @@
-import c from 'classnames';
+import clsnms from 'classnames';
+
 import { Todo } from '../../types/Todo';
+
 import { UserInfo } from '../UserInfo';
 
 type Props = {
@@ -12,7 +14,7 @@ export const TodoInfo: React.FC<Props> = ({ todo }) => {
   return (
     <article
       data-id={id}
-      className={c('TodoInfo', {
+      className={clsnms('TodoInfo', {
         'TodoInfo--completed': completed,
       })}
     >

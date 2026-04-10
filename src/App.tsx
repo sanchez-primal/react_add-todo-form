@@ -7,10 +7,11 @@ import { TodoList } from './components/TodoList';
 import { assignUserToObject } from './utility/assignUserToObject';
 
 import todosFromServer from './api/todos';
+import usersFromServer from './api/users';
 import { Todo } from './types/Todo';
 
 const todosWithUsers: Todo[] = (() => {
-  return todosFromServer.map(assignUserToObject);
+  return todosFromServer.map(todo => assignUserToObject(todo, usersFromServer));
 })();
 
 function generateNewId<T extends { id: number }>(objects: T[]) {
@@ -29,7 +30,7 @@ export const App = () => {
   const [todos, setTodos] = useState(todosWithUsers);
 
   function handleAddNewTodo(newTodo: Omit<Todo, 'user'>) {
-    const todo = assignUserToObject(newTodo);
+    const todo = assignUserToObject(newTodo, usersFromServer);
 
     todo.id = generateNewId(todos);
 
@@ -38,7 +39,7 @@ export const App = () => {
 
   return (
     <div className="App">
-      <NewTodoForm onAdd={handleAddNewTodo} />
+      <NewTodoForm users={usersFromServer} onAdd={handleAddNewTodo} />
 
       <TodoList todos={todos} />
     </div>

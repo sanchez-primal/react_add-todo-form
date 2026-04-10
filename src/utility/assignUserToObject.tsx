@@ -1,8 +1,8 @@
 import { User } from '../types/User';
-import users from '../api/users';
 
 export function assignUserToObject<T extends { userId: number }>(
   object: T,
+  users: User[],
 ): T & { user: User | null } {
   return {
     ...object,

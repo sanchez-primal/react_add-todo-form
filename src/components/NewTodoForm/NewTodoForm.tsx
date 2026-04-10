@@ -1,14 +1,16 @@
-import { useState } from "react";
-import usersFromServer from "../../api/users";
-import { Todo } from "../../types/Todo";
+import { useState } from 'react';
+
+import { User } from '../../types/User';
+import { Todo } from '../../types/Todo';
 
 type Props = {
+  users: User[];
   onAdd: (todo: Omit<Todo, 'user'>) => void;
 };
 
 const validTitleRegex = /^[0-9A-Za-zА-ЩЬЮЯҐЄІЇа-щьюяґєії'\s]*$/;
 
-export const NewTodoForm: React.FC<Props> = ({ onAdd }) => {
+export const NewTodoForm: React.FC<Props> = ({ users, onAdd }) => {
   const [formIteration, setFormIteration] = useState(0);
   const [titleInput, setTitleInput] = useState('');
   const [titleError, setTitleError] = useState(false);
@@ -76,7 +78,7 @@ export const NewTodoForm: React.FC<Props> = ({ onAdd }) => {
             id="titleInput"
             placeholder="Input a title"
             value={titleInput}
-            onChange={e => handleTitleInput(e.target.value)}
+            onChange={event => handleTitleInput(event.target.value)}
           />
           {titleError && <span className="error">Please enter a title</span>}
         </div>
@@ -85,23 +87,19 @@ export const NewTodoForm: React.FC<Props> = ({ onAdd }) => {
           <label htmlFor="userSelect">User</label>
           <select
             data-cy="userSelect"
-            onChange={e => handleUserSelect(e.target.value)}
+            id="userSelect"
+            value={selectedUser}
+            onChange={event => handleUserSelect(event.target.value)}
           >
-            <option
-              value={''}
-              selected
-            >
+            <option value={''} selected>
               Choose a user
             </option>
-            {usersFromServer.map(({ id, name }) => {
+            {users.map(({ id, name }) => {
               return (
-                <option
-                  key={id}
-                  value={id}
-                >
+                <option key={id} value={id}>
                   {name}
                 </option>
-              )
+              );
             })}
           </select>
 
@@ -116,4 +114,4 @@ export const NewTodoForm: React.FC<Props> = ({ onAdd }) => {
       </form>
     </>
   );
-}
+};
